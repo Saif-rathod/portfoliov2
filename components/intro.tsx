@@ -8,6 +8,7 @@ import { useTheme } from "@/context/theme-context";
 import { BsArrowRight, BsLinkedin } from "react-icons/bs";
 import { FaGithubSquare } from "react-icons/fa";
 import { HiDownload } from "react-icons/hi";
+import Image from "next/image";
 
 type MotionH1Props = HTMLMotionProps<"h1"> & React.HTMLAttributes<HTMLHeadingElement>;
 type MotionPProps = HTMLMotionProps<"p"> & React.HTMLAttributes<HTMLParagraphElement>;
@@ -41,11 +42,13 @@ export default function Intro() {
             animate={{ opacity: 0.75 }}
             transition={{ duration: 1 }}
           />
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=368&h=368&q=80"
             alt="Saif Rathod"
-            width="192"
-            height="192"
+            width={192}
+            height={192}
+            quality={95}
+            priority={true}
             className="h-24 w-24 rounded-full object-cover border-[0.35rem] border-white shadow-xl"
           />
         </div>
