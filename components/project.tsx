@@ -1,119 +1,56 @@
 "use client";
 
-import { useRef } from "react";
-import Image, { StaticImageData } from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { BiLinkExternal } from "react-icons/bi";
-import { AiFillGithub, AiFillYoutube } from "react-icons/ai";
-import { Icon } from "@iconify/react";
+import React from "react";
+import { motion, type HTMLMotionProps } from "framer-motion";
+import Image from "next/image";
+import { useTheme } from "@/context/theme-context";
+
+type MotionDivProps = HTMLMotionProps<"div"> & React.HTMLAttributes<HTMLDivElement>;
+const MotionDiv = motion.div as React.FC<MotionDivProps>;
 
 type ProjectProps = {
   title: string;
   description: string;
   tags: readonly string[];
-  icon: string;
+  imageUrl: any;
   github: string;
-  imageUrl: StaticImageData;
+  icon: string;
 };
 
-const techLogos: { [key: string]: string } = {
-  "Python": "logos:python",
-  "PyTorch": "logos:pytorch-icon",
-  "TensorFlow": "logos:tensorflow",
-  "Machine Learning": "carbon:machine-learning",
-  "Deep Learning": "carbon:deep-learning",
-  "Neural Networks": "carbon:neural-network",
-  "Data Analysis": "carbon:data-vis-1",
-  "Pandas": "logos:pandas-icon",
-  "Scikit-learn": "simple-icons:scikit-learn",
-  "TypeScript": "logos:typescript-icon",
-  "React": "logos:react",
-  "Node.js": "logos:nodejs-icon",
-  "Healthcare": "healthicons:health",
-  "Data Science": "carbon:data-vis-4",
-  "OpenCV": "logos:opencv",
-  "C": "logos:c",
-  "Mathematics": "carbon:mathematics",
-  "AI": "carbon:machine-learning-model",
-  "Security": "carbon:security",
-  "Finance": "carbon:finance",
-  "Trading": "carbon:chart-line",
-  "Education": "carbon:education",
-  "Gaming": "carbon:game-console",
-  "Computer Vision": "carbon:face-activated",
-  "Travel": "carbon:airport-01"
-};
-
-export default function Project({
-  title,
-  description,
-  tags,
-  icon,
-  github,
-  imageUrl,
-}: ProjectProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["0 1", "1.33 1"],
-  });
-  const scaleProgess = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const opacityProgess = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
+export default function Project({ title, description, tags, imageUrl, github, icon }: ProjectProps) {
+  const { theme } = useTheme();
 
   return (
-    <motion.div
-      ref={ref}
-      style={{
-        scale: scaleProgess,
-        opacity: opacityProgess,
-      }}
+    <MotionDiv
       className="group mb-3 sm:mb-8 last:mb-0"
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
     >
-      <section className="bg-gray-100 max-w-[58rem] border border-black/5 rounded-lg overflow-hidden sm:pr-8 relative lg:min-h-[21rem] hover:bg-gray-200 transition dark:text-white dark:bg-white/10 dark:hover:bg-white/20 shadow-lg hover:shadow-xl">
-        <div className="pt-4 pb-7 px-5 md:pl-10 md:pr-2 md:pt-10 lg:max-w-[50%] flex flex-col h-full">
-          <h3 className="text-2xl font-semibold mb-4">{title}</h3>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <p className="font-bold text-gray-500 dark:text-white/70">
-              Made with:{" "}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag, index) => (
-                techLogos[tag] && (
-                  <Icon 
-                    key={index} 
-                    icon={techLogos[tag]} 
-                    className="text-2xl" 
-                    title={tag}
-                  />
-                )
-              ))}
-            </div>
-          </div>
-          <p className="mt-2 leading-relaxed text-gray-700 dark:text-white/70 mb-4">
-            {description}
-          </p>
-          <div className="flex mt-auto">
-            <a
-              href={github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center border border-[#111827] py-2 px-4 rounded-full mr-2 text-[#111827] hover:scale-105 dark:border-white dark:text-white dark:border-opacity-40"
-            >
-              <AiFillGithub className="mr-1 opacity-70" />{" "}
-              <span className="opacity-70">GitHub</span>
-            </a>
-          </div>
+      <section className="bg-gray-100 max-w-[42rem] border border-black/5 rounded-lg overflow-hidden sm:pr-8 relative sm:h-[20rem] hover:bg-gray-200 transition sm:group-even:pl-8 dark:bg-white/10 dark:hover:bg-white/20">
+        <div className="pt-4 pb-7 px-5 sm:pl-10 sm:pr-2 sm:pt-10 sm:max-w-[50%] flex flex-col h-full sm:group-even:ml-[18rem]">
+          <h3 className="text-2xl font-semibold">{title}</h3>
+          <p className="mt-2 leading-relaxed text-gray-700 dark:text-gray-300">{description}</p>
+          <ul className="flex flex-wrap mt-4 gap-2 sm:mt-auto">
+            {tags.map((tag, index) => (
+              <li
+                className="bg-black/[0.7] px-3 py-1 text-[0.7rem] uppercase tracking-wider text-white rounded-full dark:text-white/70"
+                key={index}
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div className="relative w-full h-48 sm:h-auto sm:w-[28.25rem] lg:absolute lg:top-[60px] lg:-right-10">
-          <Image
-            src={imageUrl}
-            alt="Project I worked on"
-            quality={95}
-            className="rounded-t-lg shadow-2xl transition lg:scale-[1.1] object-cover w-full h-full"
-          />
-        </div>
+        <Image
+          src={imageUrl}
+          alt="Project I worked on"
+          quality={95}
+          className="absolute hidden sm:block top-8 -right-40 w-[28.25rem] rounded-t-lg shadow-2xl transition group-hover:scale-[1.04] group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-even:group-hover:translate-x-3 group-even:group-hover:translate-y-3 group-even:group-hover:rotate-2 group-even:right-[initial] group-even:-left-40"
+        />
       </section>
-    </motion.div>
+    </MotionDiv>
   );
 }

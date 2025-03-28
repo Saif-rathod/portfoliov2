@@ -2,14 +2,18 @@
 
 import React from "react";
 import SectionHeading from "./section-heading";
-import { motion } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 import Image from "next/image";
 import muImage from "@/public/image.png";
 
-const MotionDiv = motion.div;
-const MotionUl = motion.ul;
-const MotionLi = motion.li;
+type MotionDivProps = HTMLMotionProps<"div"> & React.HTMLAttributes<HTMLDivElement>;
+type MotionUlProps = HTMLMotionProps<"ul"> & React.HTMLAttributes<HTMLUListElement>;
+type MotionLiProps = HTMLMotionProps<"li"> & React.HTMLAttributes<HTMLLIElement>;
+
+const MotionDiv = motion.div as React.FC<MotionDivProps>;
+const MotionUl = motion.ul as React.FC<MotionUlProps>;
+const MotionLi = motion.li as React.FC<MotionLiProps>;
 
 export default function Education() {
   const { ref } = useSectionInView("Education");

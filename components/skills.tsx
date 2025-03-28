@@ -2,10 +2,14 @@
 
 import React from "react";
 import SectionHeading from "./section-heading";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import { skillsData } from "@/lib/data";
 import { useSectionInView } from "@/lib/hooks";
-import { motion } from "framer-motion";
+import { useTheme } from "@/context/theme-context";
 import { Icon } from "@iconify/react";
+
+type MotionLiProps = HTMLMotionProps<"li"> & React.HTMLAttributes<HTMLLIElement>;
+const MotionLi = motion.li as React.FC<MotionLiProps>;
 
 const fadeInAnimationVariants = {
   initial: {
@@ -30,6 +34,7 @@ const growOnHover = {
 
 export default function Skills() {
   const { ref } = useSectionInView("Skills", 0.5);
+  const { theme } = useTheme();
 
   return (
     <section
@@ -40,7 +45,7 @@ export default function Skills() {
       <SectionHeading>My Skills</SectionHeading>
       <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
         {skillsData.map((skill, index) => (
-          <motion.li
+          <MotionLi
             className="flex flex-col items-center justify-center p-4 sm:p-5 md:p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 aspect-square"
             key={index}
             variants={fadeInAnimationVariants}
@@ -56,7 +61,7 @@ export default function Skills() {
               <Icon icon={skill.icon} className="text-3xl sm:text-4xl md:text-5xl" />
             </div>
             <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900 dark:text-white text-center">{skill.name}</span>
-          </motion.li>
+          </MotionLi>
         ))}
       </ul>
     </section>

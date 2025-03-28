@@ -1,103 +1,106 @@
 "use client";
 
-import Image from "next/image";
 import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
-import { BsLinkedin } from "react-icons/bs";
-import { FaGithub } from "react-icons/fa";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 import { useActiveSectionContext } from "@/context/active-section-context";
-import ParticleContainer from "./particle-container";
-import profilePic from "@/public/saifghibli.jpg";
+import { useTheme } from "@/context/theme-context";
+import { BsArrowRight, BsLinkedin } from "react-icons/bs";
+import { FaGithubSquare } from "react-icons/fa";
+import { HiDownload } from "react-icons/hi";
 
-type MotionSpanProps = HTMLMotionProps<"span">;
-type MotionH1Props = HTMLMotionProps<"h1">;
-type MotionPProps = HTMLMotionProps<"p">;
-type MotionDivProps = HTMLMotionProps<"div">;
+type MotionH1Props = HTMLMotionProps<"h1"> & React.HTMLAttributes<HTMLHeadingElement>;
+type MotionPProps = HTMLMotionProps<"p"> & React.HTMLAttributes<HTMLParagraphElement>;
+type MotionDivProps = HTMLMotionProps<"div"> & React.HTMLAttributes<HTMLDivElement>;
 
-const MotionSpan = motion("span") as React.FC<MotionSpanProps>;
-const MotionH1 = motion("h1") as React.FC<MotionH1Props>;
-const MotionP = motion("p") as React.FC<MotionPProps>;
-const MotionDiv = motion("div") as React.FC<MotionDivProps>;
+const MotionH1 = motion.h1 as React.FC<MotionH1Props>;
+const MotionP = motion.p as React.FC<MotionPProps>;
+const MotionDiv = motion.div as React.FC<MotionDivProps>;
 
 export default function Intro() {
   const { ref } = useSectionInView("Home", 0.5);
   const { setActiveSection, setTimeOfLastClick } = useActiveSectionContext();
+  const { theme } = useTheme();
 
   return (
     <section
       ref={ref}
       id="home"
-      className="mb-16 sm:mb-0 text-center scroll-mt-[100rem] particles-section pt-28 pb-14 sm:pt-36 sm:pb-18 w-full px-4"
+      className="mb-28 max-w-[50rem] text-center leading-8 sm:mb-0 scroll-mt-[100rem]"
     >
-      <ParticleContainer />
-      <div className="flex items-center justify-center">
+      <MotionDiv
+        className="flex items-center justify-center"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="relative">
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              type: "tween",
-              duration: 0.2,
-            }}
-          >
-            <Image
-              src={profilePic}
-              alt="Saif portrait"
-              width="192"
-              height="192"
-              quality="95"
-              priority={true}
-              className="h-24 w-24 rounded-full object-cover border-[0.35rem] border-white shadow-xl"
-            />
-          </motion.div>
+          <MotionDiv
+            className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-gradient"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.75 }}
+            transition={{ duration: 1 }}
+          />
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=368&h=368&q=80"
+            alt="Saif Rathod"
+            width="192"
+            height="192"
+            className="h-24 w-24 rounded-full object-cover border-[0.35rem] border-white shadow-xl"
+          />
         </div>
-      </div>
+      </MotionDiv>
 
       <MotionH1
         className="mb-10 mt-4 px-0 sm:px-4 text-2xl font-medium !leading-[1.5] sm:text-4xl text-white max-w-[50rem] mx-auto"
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <span className="font-bold">Hey, Saif here.</span>{" "}
-        <span className="font-bold">Crafting AI dreams</span> into reality —{" "}
-        <span className="font-bold">one neural network</span> at a time.
+        <span className="font-bold">Hello, I'm Saif.</span> I'm a{" "}
+        <span className="font-bold">full-stack developer</span> with{" "}
+        <span className="font-bold">8 months</span> of experience. I enjoy
+        building <span className="italic">sites & apps</span>. My focus is{" "}
+        <span className="underline">React (Next.js)</span>.
       </MotionH1>
 
       <MotionP
-        className="mb-8 px-4 text-lg text-gray-300"
+        className="mb-28 px-4 text-lg font-medium text-white"
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
+        transition={{ delay: 0.2 }}
       >
-        CS student by day, code artist by night. Building tomorrow's tech with today's coffee ☕
+        <a
+          className="bg-white text-black px-4 py-2 rounded-full outline-none hover:scale-110 hover:bg-gray-100 active:scale-105 transition"
+          href="#contact"
+          onClick={() => {
+            setActiveSection("Contact");
+            setTimeOfLastClick(Date.now());
+          }}
+        >
+          Contact me here <BsArrowRight className="inline-block" />
+        </a>
+        <a
+          className="bg-white text-black p-4 flex items-center gap-2 rounded-full outline-none hover:scale-110 hover:bg-gray-100 active:scale-105 transition"
+          href="/Saif_Rathod_Resume.pdf"
+          download
+        >
+          Download CV <HiDownload className="opacity-60" />
+        </a>
+        <a
+          className="bg-white p-4 text-gray-700 flex items-center gap-2 rounded-full outline-none hover:scale-110 hover:text-gray-950 active:scale-105 transition"
+          href="https://linkedin.com"
+          target="_blank"
+        >
+          <BsLinkedin />
+        </a>
+        <a
+          className="bg-white p-4 text-gray-700 flex items-center gap-2 text-[1.35rem] rounded-full outline-none hover:scale-110 hover:text-gray-950 active:scale-105 transition"
+          href="https://github.com"
+          target="_blank"
+        >
+          <FaGithubSquare />
+        </a>
       </MotionP>
-
-      <MotionDiv
-        className="flex flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          delay: 0.1,
-        }}
-      >
-        <a
-          className="group bg-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-105 active:scale-105 transition cursor-pointer borderBlack text-gray-950 hover:text-gray-950 dark:bg-white dark:text-gray-950 dark:hover:text-gray-950"
-          href="https://github.com/Saif-rathod"
-          target="_blank"
-        >
-          GitHub <FaGithub className="opacity-70" />
-        </a>
-
-        <a
-          className="group bg-gray-950 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 active:scale-105 transition border-2 border-white border-opacity-40"
-          href="https://www.linkedin.com/in/saif-rathod/"
-          target="_blank"
-        >
-          <span className="opacity-70">LinkedIn</span>
-          <BsLinkedin className="opacity-70" />
-        </a>
-      </MotionDiv>
     </section>
   );
 }
